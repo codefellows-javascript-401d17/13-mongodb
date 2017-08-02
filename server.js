@@ -5,20 +5,20 @@ const morgan = require('morgan');
 const cors = require('cors')
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
-const debug = require ('debug')('hike:server');
-// const listRouter = require('./route/hike-route.js');
+const debug = require ('debug')('movie:server');
+const movieRouter = require('./route/movie-route.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = 'mongodb://localhost/listofhikes';
+const MONGODB_URI = 'mongodb://localhost/actorsinmovie';
 
 mongoose.Promise= Promise;
 mongoose.connect(MONGODB_URI);
 
 app.use(cors());
 app.use(morgan('dev'));
-// app.use(listRouter);
+app.use(movieRouter);
 
 app.listen(PORT, ()=> {
-  debug(`listening on pr ${PORT}`);
+  debug(`listening on port ${PORT}`);
 });
