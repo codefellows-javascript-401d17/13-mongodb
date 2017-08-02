@@ -17,7 +17,7 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 app.use(cors);
-app.use(debug('dev'));
+app.use(morgan('dev'));
 app.use(bandRouter);
 
 app.listen(PORT, () => {
