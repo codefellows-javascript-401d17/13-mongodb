@@ -12,11 +12,6 @@ app.use(cors());
 app.use(morgan('dev'));
 
 mongoose.connect(MONGODB_URL);
-const lax = new Airport({ name : 'test'});
-lax.save(function(err) {
-  if(err) return err;
-  console.log('new airport saved');
-})
 
 app.listen(PORT, function() {
   debug(`listening on port ${PORT}`);
