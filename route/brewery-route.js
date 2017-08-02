@@ -17,8 +17,8 @@ breweryRouter.post('/api/brewery', jsonParser, function (req, res, next) {
 
 breweryRouter.get('/api/brewery/:id', function (req, res, next) {
   debug('GET: /api/brewery/:id');
-
-  Brewery.findById(req.param.id)
+  console.log('#$)(*#&)$*#&)$&', req.params.id);
+  Brewery.findById(req.params.id)
   .then( brewery => res.json(brewery))
   .catch(next);
 });
@@ -26,7 +26,7 @@ breweryRouter.get('/api/brewery/:id', function (req, res, next) {
 breweryRouter.put('/api/brewery/:id', function (req, res, next) {
   debug('GET: /api/brewery/:id');
 
-  Brewery.findByIdAndUpdate(req.param.id, req.body)
+  Brewery.findByIdAndUpdate(req.params.id, req.body)
   .then( brewery => res.json(brewery))
   .catch(next);
 });
@@ -34,6 +34,6 @@ breweryRouter.put('/api/brewery/:id', function (req, res, next) {
 breweryRouter.delete('/api/brewery/:id', function (req, res, next) {
   debug('GET: /api/brewery/:id');
 
-  Brewery.findByIdAndRemove(req.param.id)
+  Brewery.findByIdAndRemove(req.params.id)
   .catch(next);
 });
