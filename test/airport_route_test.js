@@ -6,7 +6,7 @@ const Airport = require('../model/airport.js');
 
 
 require('../server.js');
-var exampleAirport;
+var exampleAirportBody = { name: 'testport' };
 
 describe('Airport Router', function () {
   describe('POST /api/airport', function () {
@@ -18,16 +18,37 @@ describe('Airport Router', function () {
         return;
       }
       done();
-    })
+    });
     it('saves airport document to collection', (done) => {
       request.post(`${url}/api/airport`)
-        .send(exampleAirport)
+        .send(exampleAirportBody)
         .end((err, rsp) => {
-          if(err) return done(err);
+          if (err) return done(err);
           expect(rsp.status).to.equal(200);
           this.tempAirport = rsp.body;
           done();
-        })
+        });
+    });
+  });
+  describe('GET /api/airport', function () {
+    describe('given a valid body', function () {
+      before((done) => {
+        new Airport(exampleAirportBody).save()
+          .then((airport) => {
+            this.tempAirport = airport;
+            done();
+          })
+          .catch(done);
+      })
+      it('returns an airport response', (done) => {
+        request.get(`${url}/api/airport/${this.tempAirport._id}`)
+          .end((err, rsp) => {
+            if (err) return done(err);
+            expect(rsp.status).to.equal(200);
+            expect(rsp.body.name).to.equal('testport');
+            done();
+          })
+      })
     })
   })
 });
