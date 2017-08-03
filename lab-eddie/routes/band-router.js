@@ -39,13 +39,13 @@ bandRouter.get('/api/band/', function(req, res, next) {
 bandRouter.delete('/api/band/:id', function(req, res, next) {
   debug('DELETE: /api/band');
 
-  Band.findByIdAndRemove(request.params.id)
+  Band.findByIdAndRemove(req.params.id)
     .then(() => {
-      response.sendStatus(204);
+      res.sendStatus(204);
       res.send('Item deleted');
       res.end();
     })
-    .catch(error => next(error));
+    .catch(err => next(err));
 });
 
 
