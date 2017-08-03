@@ -7,11 +7,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Promise = require('bluebird');
 
-
 const bandRouter = require('./routes/band-router.js');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = 'mongodb://localhost/ledzeppelin';
+const MONGODB_URI = 'mongodb://localhost/bands';
+
+console.log(app);
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, { useMongoClient: true });
