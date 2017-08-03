@@ -97,7 +97,10 @@ describe('Band Test stuff', function() {
       .send({name: 'Black Sabbath'})
       .end((err, res) => {
         if(err) throw new Error(err);
-        console.log(res.body);
+        expect(res.body._id).to.equal(this.tempBand._id.toString());
+        expect(res.body.name).to.not.equal(this.tempBand.name);
+        expect(res.body.name).to.equal('Black Sabbath');
+        done();
       })
     });
   });

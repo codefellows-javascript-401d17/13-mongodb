@@ -50,12 +50,12 @@ bandRouter.delete('/api/band/:id', function(req, res, next) {
     .catch(err => next(createError(400, err.message)));
 });
 
-bandRouter.put('/api/band/:id', function(req, res, next) {
+bandRouter.put('/api/band/:id',jsonParser, function(req, res, next) {
   debug('PUT: /api/band/:id');
-  console.log(req.body);
 
-  Band.findByIdAndUpdate(req.params.id, req.body)
+  Band.findByIdAndUpdate(req.params.id, req.body, {new: true})
     .then(band => {
+      console.log(band)
       res.json(band);
     })
     .catch(err => next(createError(400, err.message)));
