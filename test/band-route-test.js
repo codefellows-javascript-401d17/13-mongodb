@@ -124,8 +124,9 @@ describe('Band Routes', function() {
     });
 
     it('should return 400 bad request', done => {
-      request.put(`${url}/api/band/fake`)
+      request.put(`${url}/api/band/${this.testBand._id}`)
       .end((err, res) => {
+        console.log('res text:', res.text);
         expect(res.status).to.equal(400);
         expect(res.text).to.equal('BadRequestError');
         done();
@@ -133,7 +134,7 @@ describe('Band Routes', function() {
     });
 
     it('should return 404 not found', done => {
-      request.put(`${url}/api/band/12231789`)
+      request.put(`${url}/api/band/12235235`)
       .send({ name: 'new name', origin: 'new origin'})
       .end((err, res) => {
         expect(res.status).to.equal(404);
