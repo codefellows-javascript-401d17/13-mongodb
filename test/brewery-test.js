@@ -13,10 +13,18 @@ require('../server.js');
 
 const url = `http://localhost:${PORT}`;
 
+let tempBrewery;
+
 const exampleBrewery = {
-  name: 'test brewery name',
-  address: 'test address',
+  name: 'the brewery name',
+  address: 'the address',
   phoneNumber: '555-555-5555',
+};
+
+const newBrewery = {
+  name: 'new test brewery name',
+  address: 'new test address',
+  phoneNumber: '777-777-7777',
 };
 
 describe('Brewery Routes', function() {
@@ -38,8 +46,8 @@ describe('Brewery Routes', function() {
         .end((err,res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test brewery name');
-          expect(res.body.address).to.equal('test address');
+          expect(res.body.name).to.equal('the brewery name');
+          expect(res.body.address).to.equal('the address');
           expect(res.body.phoneNumber).to.equal('555-555-5555');
           this.tempBrewery = res.body;
           done();
@@ -85,8 +93,8 @@ describe('Brewery Routes', function() {
         .end( (err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test brewery name');
-          expect(res.body.address).to.equal('test address');
+          expect(res.body.name).to.equal('the brewery name');
+          expect(res.body.address).to.equal('the address');
           expect(res.body.phoneNumber).to.equal('555-555-5555');
           done();
         });
@@ -100,6 +108,56 @@ describe('Brewery Routes', function() {
           done();
         });
       });
+    });
+  });
+  describe('testing PUT /api/brewery', () => {
+    before( done => {
+      exampleBrewery.timestamp = new Date();
+      new Brewery(exampleBrewery).save()
+      .then( brewery => {
+        this.tempBrewery = brewery;
+        done();
+      })
+      .catch(done);
+    });
+
+    after( done => {
+      delete exampleBrewery.timestamp;
+      if (this.tempBrewery) {
+        Brewery.remove({})
+        .then( () => done())
+        .catch(done);
+        return;
+      }
+      done();
+    });
+    it('should respond with a 200 status code and an updated beer object.', () => {
+      console.log(this.tempBrewery._id);
+      return request.put(`${url}/api/brewery/${this.tempBrewery._id}`)
+      .send(newBrewery)
+      .then(res => {
+        expect(res.status).to.equal(200);
+        tempBrewery = res.body;
+      });
+    });
+  });
+
+  it('should respond with a 400 error code.', () => {
+    return request.post(`${url}/api/brewery`)
+    .send(tempBrewery)
+    .then((res) => {
+      tempBrewery = res.body;
+      return request.put(`${url}/api/brewery/${this.tempBrewery._id}`)
+      .send(null);
+    })
+    .catch(err => {
+      expect(err.status).to.equal(400);
+    });
+  });
+  it('should respond with a 404 error code if an ID is not found.', () => {
+    return request.get(`${url}/api/brewery/12345`)
+    .catch(err => {
+      expect(err.status).to.equal(404);
     });
   });
 });

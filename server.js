@@ -11,7 +11,7 @@ const errors = require('./lib/error-middleware.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = 'mongodb://localhost/brewerybeers';
+const MONGODB_URI = 'mongodb://localhost/brewery';
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);

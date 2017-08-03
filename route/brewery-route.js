@@ -15,19 +15,34 @@ breweryRouter.post('/api/brewery', jsonParser, function (req, res, next) {
   .catch(next);
 });
 
-breweryRouter.get('/api/brewery/:id', function (req, res, next) {
+breweryRouter.get('/api/brewery/:id',  function (req, res, next) {
   debug('GET: /api/brewery/:id');
   Brewery.findById(req.params.id)
   .then( brewery => res.json(brewery))
   .catch(next);
 });
 
-breweryRouter.put('/api/brewery/:id', function (req, res, next) {
-  debug('GET: /api/brewery/:id');
+breweryRouter.put('/api/brewery/:id', jsonParser, (req, res, next) => {
+  debug('PUT /api/brewerys/:id');
 
-  Brewery.findByIdAndUpdate(req.params.id, req.body)
-  .then( brewery => res.json(brewery))
-  .catch(next);
+  if (Object.keys(req.body).length === 0) {
+    Brewery.findById(req.params.id)
+      .then(brewery => {
+        res.status(400);
+        res.json(brewery);
+      })
+      .catch(next);
+    return;
+  }
+
+  let options = {
+    runValidator: true,
+    new: true,
+  };
+
+  Brewery.findByIdAndUpdate(req.params.id, req.body, options)
+    .then(brewery => res.json(brewery))
+    .catch(next);
 });
 
 breweryRouter.delete('/api/brewery/:id', function (req, res, next) {
