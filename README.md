@@ -58,3 +58,5 @@
 
 ### Bonus
 * **2pts:** a `GET` request to `/api/resource-name` should return an array of stored resources
+### Questions and Observations
+###### Once I knew what I was doing in this assignment it wasn't too hard just more tedious than anything. However when I did end up getting stuck it is very hard for me to dig though this code and find the bug, I need to work on my bug fixing. I feel like there should be assignments where all you do is bug fix some buggy code just to get better at looking for abnormalities. In the end I still haven't fixed one thing wrong with my code, my if statement checking for an empty object or checking for a missing parameter keeps timing out when it gets to that statement. I did end up completing the bonus assingment as well.
