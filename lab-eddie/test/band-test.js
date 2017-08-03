@@ -15,7 +15,15 @@ let testingBand = {
 }
 
 describe('Band Test stuff', function() {
-
+  describe('GET api/band/invalid ID', function() {
+    it('should throw a 404 error', function(done){
+      request.get('localhost:3000/api/band/999999')
+      .end(err => {
+        expect(err.status).to.equal(404);
+        done();
+      });
+    });
+  });
   describe('POST: /api/band/', function() {
     after(done => {
       Band.remove({})
