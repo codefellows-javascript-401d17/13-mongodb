@@ -76,4 +76,57 @@ describe('Movie Routes', function(){
       });
     });
   });
+
+  describe('PUT: /api/movie', function(){
+    describe('with a valid body', function(){
+      before(done => {
+        exampleMovie.dateReleased = new Date();
+        new Movie(exampleMovie).save()
+        .then( movie => {
+          this.tempMovie = movie;
+          done();
+        })
+        .catch(done);
+      });
+
+      after(done => {
+        delete exampleMovie.dateReleased;
+        if(this.tempMovie) {
+          Movie.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+        done();
+      });
+
+      it('should return a 200 and update the movie', done =>{
+        request.put(`${url}/api/movie/${this.tempMovie._id}`)
+        .send({name:'a new movie'})
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('DELETE: /api/movie', function(){
+    before(done => {
+      exampleMovie.dateReleased = new Date();
+      new Movie(exampleMovie).save()
+      .then( movie => {
+        this.tempMovie = movie;
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should delete a movie', done => {
+      request.delete(`${url}/api/movie/${this.tempMovie._id}`, function(error, response) {
+        expect(response.status).to.equal(204);
+        done();
+      });
+    });
+  });
 });

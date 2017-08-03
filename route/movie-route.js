@@ -22,3 +22,18 @@ movieRouter.get('/api/movie/:id', function(req, res, next) {
     .then( movie => res.json(movie))
     .catch(next);
 });
+
+movieRouter.put('/api/movie/:id', function(req,res,next) {
+  debug('PUT: /api/band/:id');
+
+  Movie.findByIdAndUpdate(req.params.id, req.body, { 'new': true }) //maybe need {new:true}?
+  .then(movie => res.json(movie))
+  .catch(next);
+});
+
+movieRouter.delete('/api/movie/:id', function(req, res, next) {
+  debug('DELETe: /api/movie');
+  Movie.findByIdAndRemove(req.params.id)
+  .then(() => res.sendStatus(204))
+  .catch(next);
+});
