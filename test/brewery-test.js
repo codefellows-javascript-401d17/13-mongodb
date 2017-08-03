@@ -49,7 +49,7 @@ describe('Brewery Routes', function() {
     describe('with an invalid request', function() {
       it('should return 400', done => {
         request.post(`${url}/api/brewery`)
-        .send(null)
+        .send()
         .end((err,res) => {
           expect(res.status).to.equal(400);
           done();
