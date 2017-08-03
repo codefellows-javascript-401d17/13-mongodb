@@ -51,4 +51,33 @@ describe('Airport Router', function () {
       })
     })
   })
+  describe('PUT /api/airport/:id', function () {
+    describe('when provided a proper id', function () {
+      before((done) => {
+        new Airport(exampleAirportBody).save()
+          .then((airport) => {
+            this.tempAirport = airport;
+            done();
+          })
+          .catch(done)
+      })
+      after((done) => {
+        Airport.remove({})
+          .then(() => {
+            done()
+          })
+          .catch(done);
+      })
+      it('should respond with an airport', (done) => {
+        let updateBody = { name: 'coolnewairport' };
+        request.put(`${url}/api/airport/${this.tempAirport._id}`)
+          .send(updateBody)
+          .end((err, rsp) => {
+            if(err) return done(err);
+            expect(rsp.status).to.equal(200);
+            done();
+          })
+      })
+    })
+  })
 });
