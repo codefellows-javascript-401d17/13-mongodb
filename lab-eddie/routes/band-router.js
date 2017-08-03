@@ -52,13 +52,14 @@ bandRouter.delete('/api/band/:id', function(req, res, next) {
 
 bandRouter.put('/api/band/:id',jsonParser, function(req, res, next) {
   debug('PUT: /api/band/:id');
+  console.log(req.params.id);
+  if(!req.body) next(createError(400, err.message));
 
   Band.findByIdAndUpdate(req.params.id, req.body, {new: true})
     .then(band => {
-      console.log(band)
       res.json(band);
     })
-    .catch(err => next(createError(400, err.message)));
+    .catch(err => next(createError(404, err.message)));
 });
 
 
