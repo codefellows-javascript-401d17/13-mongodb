@@ -3,17 +3,27 @@ const jsonParser = require('body-parser').json();
 const debug = require('debug')('airport:airport-router');
 const Airport = require('../model/airport.js');
 const airportRouter = module.exports = new Router();
+const createError = require('http-errors');
 
-airportRouter.post('/api/airport', jsonParser, function (req, res, next) {
+airportRouter.post('/api/airport', jsonParser, function (req, rsp, next) {
   debug('POST: /api/airport');
-
+  if (Object.keys(req.body).length === 0) { 
+    return next(createError(400));
+  }
   new Airport(req.body).save()
-    .then(airport => res.json(airport))
-    .catch(next);
+    .then(airport => rsp.json(airport))
+    .catch((err) => {
+      debug('error: ', err.status);
+      next(createError(404));
+    });
 });
 
 airportRouter.put('/api/airport/:id', jsonParser, function (req, rsp, next) {
   debug('PUT: /api/airport/:id');
+
+  if (Object.keys(req.body).length === 0) { 
+    return next(createError(400));
+  }
 
   Airport.findByIdAndUpdate(req.params.id, req.body)
     .then((airport) => {

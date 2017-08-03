@@ -24,6 +24,7 @@
     "cors": "^2.8.4",
     "debug": "^2.6.8",
     "express": "^4.15.3",
+    "http-errors": "^1.6.1",
     "mongoose": "^4.11.5",
     "morgan": "^1.8.2"
   },
