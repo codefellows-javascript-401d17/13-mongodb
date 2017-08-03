@@ -46,6 +46,16 @@ describe('Brewery Routes', function() {
         });
       });
     });
+    describe('with an invalid request', function() {
+      it('should return 400', done => {
+        request.post(`${url}/api/brewery`)
+        .send(null)
+        .end((err,res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
   });
   describe('GET: /api/brewery/:id', function() {
     describe('with a valid body', function() {
@@ -73,12 +83,18 @@ describe('Brewery Routes', function() {
       it('should return a brewery', done => {
         request.get(`${url}/api/brewery/${this.tempBrewery._id}`)
         .end( (err, res) => {
-          console.log(res.body);
           if(err) return done(err);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal('test brewery name');
           expect(res.body.address).to.equal('test address');
           expect(res.body.phoneNumber).to.equal('555-555-5555');
+          done();
+        });
+      });
+      it('should return 404', done => {
+        request.get(`${url}/api/brewery/1231231231241413212`)
+        .end( (err, res) => {
+          expect(res.status).to.equal(404);
           done();
         });
       });

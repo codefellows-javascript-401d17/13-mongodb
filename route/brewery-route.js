@@ -17,7 +17,6 @@ breweryRouter.post('/api/brewery', jsonParser, function (req, res, next) {
 
 breweryRouter.get('/api/brewery/:id', function (req, res, next) {
   debug('GET: /api/brewery/:id');
-  console.log('#$)(*#&)$*#&)$&', req.params.id);
   Brewery.findById(req.params.id)
   .then( brewery => res.json(brewery))
   .catch(next);
