@@ -1,60 +1,19 @@
-![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) 13: Single Resource Mongo and Express API
-===
+# MongoDB - Lab 13
 
-## Submission Instructions
-  * fork this repository & create a new branch for your work
-  * write all of your code in a directory named `lab-` + `<your name>` **e.g.** `lab-susan`
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
-  * write a question and observation on canvas
+### Description:
 
-## Learning Objectives  
-* students will be able to work with the MongoDB database management system
-* students will understand the primary concepts of working with a NoSQL database management system
-* students will be able to create custom data models *(schemas)* through the use of mongoose.js
-* students will be able to use mongoose.js helper methods for interacting with their database persistence layer
+This app is an API that utilizes the express framework. Following REST architecture the this app allows a resource to be READ, CREATED, UPDATED and DELETED. It runs the appropriate tests for getting the correct data and error messages.
 
-## Requirements
-#### Configuration
-* `package.json`
-* `.eslintrc`
-* `.gitignore`
-* `README.md`
-  * your `README.md` should include detailed instructions on how to use your API
+### How to use:
 
-#### Feature Tasks
-* create an HTTP Server using `express`
-* create a resource **model** of your choice that uses `mongoose.Schema` and `mongoose.model`
-* use the `body-parser` express middleware to parse the `req` body on `POST` and `PUT` requests
-* use the npm `debug` module to log the functions and methods that are being used in your application
-* use the express `Router` to create a route for doing **RESTFUL CRUD** operations against your _model_
-
-## Server Endpoints
-### `/api/resource-name`
-* `POST` request
-  * should pass data as stringifed JSON in the body of a post request to create a new resource
-
-### `/api/resource-name/:id`
-* `GET` request
-  * should pass the id of a resource through the url endpoint to get a resource
-    * **this should use `req.params`, not querystring parameters**
-* `PUT` request
-  * should pass data as stringifed JSON in the body of a put request to update a pre-existing resource
-* `DELETE` request
-  * should pass the id of a resource though the url endpoint to delete a resource
-    * **this should use `req.params`**
-
-### Tests
-* create a test that will ensure that your API returns a status code of 404 for routes that have not been registered
-* create a series of tests to ensure that your `/api/resource-name` endpoint responds as described for each condition below:
-  * `GET` - test 200, returns a resource with a valid body
- * `GET` - test 404, respond with 'not found' for valid requests made with an id that was not found
- * `PUT` - test 200, returns a resource with an updated body
- * `PUT` - test 400, responds with 'bad request' if no request body was provided
- * `PUT` - test 404, responds with 'not found' for valid requests made with an id that was not found
- * `POST` - test 400, responds with 'bad request' if no request body was provided
- * `POST` - test 200, returns a resource for requests made with a valid body
-
-### Bonus
-* **2pts:** a `GET` request to `/api/resource-name` should return an array of stored resources
+* Run the server from the command line using `npm run start`
+* Open a separate tab in the terminal
+* From the second tab start by entering `http [optional request method] :8000/api/song/`
+to get all the ids of the songs in local storage
+* `GET` or READ requests do not require a request method in the command line
+  * followed by the songs items id like `/[unique-song-id]'`
+* `POST` or CREATE requests are made with `POST` as the request method
+  * followed by a space then key-value pairs like `name=[item-name]` (no space after parenthesis)
+  * all key-value pairs must have a space between them
+* `DELETE` requests are made like `GET` only with the `DELETE` as the request method
+* `PUT` or UPDATE requests are made by entering the `/[id]` followed by a space key value pairs like the `POST` request
