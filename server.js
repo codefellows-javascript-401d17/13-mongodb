@@ -7,7 +7,7 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const debug = require('debug')('pokemon:server');
 
-const bandRouter = require('./route/pokemon-route');
+const pokemonRouter = require('./route/pokemon-route');
 const errors = require('./lib/error-middleware.js');
 
 const app = express();
@@ -19,7 +19,7 @@ mongoose.connect(MONGODB_URI);
 
 app.use(cors());
 app.use(morgan('dev'));
-app.use(bandRouter);
+app.use(pokemonRouter);
 app.use(errors);
 
 app.listen(PORT, () => {
