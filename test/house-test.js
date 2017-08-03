@@ -12,7 +12,7 @@ require('../server.js');
 const url = `http://localhost:${PORT}`;
 const exampleHouse = {
   name: 'hodor'
-}
+};
 
 describe('House Routes', function() {
   describe('POST: /api/house', function() {
