@@ -101,6 +101,13 @@ describe('Band Test stuff', function() {
       .catch(err => done(err));
     });
 
+    it('Should throw a 400 error with no body passed', done => {
+      request.put(`localhost:3000/api/band/${this.tempBand._id}`, err => {
+        expect(err.status).to.equal(400);
+        done();
+      })
+    });
+
     it('Should throw a 404 error with an invalid id', done => {
       request.put(`localhost:3000/api/band/666`)
       .send({name: 'Black Sabbath', genre: "Heavy Metal"})
@@ -109,6 +116,7 @@ describe('Band Test stuff', function() {
         done();
       })
     });
+
 
     it('Should change the stored band', (done) => {
       request.put(`localhost:3000/api/band/${this.tempBand._id}`)

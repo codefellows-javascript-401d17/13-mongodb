@@ -52,8 +52,7 @@ bandRouter.delete('/api/band/:id', function(req, res, next) {
 
 bandRouter.put('/api/band/:id',jsonParser, function(req, res, next) {
   debug('PUT: /api/band/:id');
-  console.log(req.params.id);
-  if(!req.body) next(createError(400, err.message));
+  if(Object.keys(req.body).length === 0) return next(createError(400, 'No body provided'));
 
   Band.findByIdAndUpdate(req.params.id, req.body, {new: true})
     .then(band => {
