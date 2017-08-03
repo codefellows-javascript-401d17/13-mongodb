@@ -52,8 +52,9 @@ bandRouter.delete('/api/band/:id', function(req, res, next) {
 
 bandRouter.put('/api/band/:id', function(req, res, next) {
   debug('PUT: /api/band/:id');
+  console.log(req.body);
 
-  Book.findByIdAndUpdate(request.params.id, request.body)
+  Band.findByIdAndUpdate(req.params.id, req.body)
     .then(band => {
       res.json(band);
     })

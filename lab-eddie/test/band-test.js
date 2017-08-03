@@ -15,6 +15,7 @@ let testingBand = {
 }
 
 describe('Band Test stuff', function() {
+
   describe('GET api/band/invalid ID', function() {
     it('should throw a 404 error', function(done){
       request.get('localhost:3000/api/band/999999')
@@ -24,6 +25,7 @@ describe('Band Test stuff', function() {
       });
     });
   });
+
   describe('POST: /api/band/', function() {
     after(done => {
       Band.remove({})
@@ -45,6 +47,7 @@ describe('Band Test stuff', function() {
       });
     });
   }); 
+  
   describe('GET: /api/band', function() {
     before(done => {
       Band.create(testingBand)
@@ -54,11 +57,13 @@ describe('Band Test stuff', function() {
       })
       .catch(err => done(err));
     });
+
     after(done => {
       Band.remove({})
       .then(() => done())
       .catch(err => done(err));
     });
+
     it('should get a band back.', done => {
       request.get(`localhost:3000/api/band/${this.tempBand._id}`, (err, res) => {
         if(err) throw new Error(err);
@@ -69,6 +74,31 @@ describe('Band Test stuff', function() {
         expect(res.body.hometown).to.equal(this.tempBand.hometown);
         done();
       });
+    });
+  });
+  describe('PUT: /api/band', function() {
+    before(done => {
+      Band.create(testingBand)
+      .then(band => {
+        this.tempBand = band;
+        done();
+      })
+      .catch(err => done(err));
+    });
+
+    after(done => {
+      Band.remove({})
+      .then(() => done())
+      .catch(err => done(err));
+    });
+
+    it('Should change the stored band', (done) => {
+      request.put(`localhost:3000/api/band/${this.tempBand._id}`)
+      .send({name: 'Black Sabbath'})
+      .end((err, res) => {
+        if(err) throw new Error(err);
+        console.log(res.body);
+      })
     });
   });
 });
