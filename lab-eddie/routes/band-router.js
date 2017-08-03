@@ -18,10 +18,15 @@ bandRouter.post('/api/band/', jsonParser, function(req, res, next) {
 
 bandRouter.get('/api/band/:id', function(req, res, next) {
   debug('GET: /api/band/:id');
-  console.log(Band)
   Band.findById(req.params.id)
   .then( band => res.json(band))
   .catch(next);
+});
+
+bandRouter.get('/', function(req, res, next) {
+  debug('GET: /');
+  res.send('This is a test')
+  res.end();
 });
 
 bandRouter.get('/api/band/', function(req, res, next) {
@@ -29,6 +34,18 @@ bandRouter.get('/api/band/', function(req, res, next) {
   Band.find({})
   .then( band => res.json(band))
   .catch(next);
+});
+
+bandRouter.delete('/api/band/:id', function(req, res, next) {
+  debug('DELETE: /api/band');
+
+  Band.findByIdAndRemove(request.params.id)
+    .then(() => {
+      response.sendStatus(204);
+      res.send('Item deleted');
+      res.end();
+    })
+    .catch(error => next(error));
 });
 
 

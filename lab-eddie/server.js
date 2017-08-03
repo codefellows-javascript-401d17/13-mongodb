@@ -1,10 +1,10 @@
 'use strict';
 
-const express = require('express');
 const morgan = require('morgan');
 const debug = require('debug')('app:server');
-const cors = require('cors');
+const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const Promise = require('bluebird');
 
 
