@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const request = require('superagent');
-const List = require('../model/list.js');
+const House = require('../model/house.js');
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
@@ -10,16 +10,16 @@ mongoose.Promise = Promise;
 require('../server.js');
 
 const url = `http://localhost:${PORT}`;
-const exampleList = {
-  name: 'test list name'
+const exampleHouse = {
+  name: 'hodor'
 }
 
-describe('List Routes', function() {
-  describe('POST: /api/list', function() {
+describe('House Routes', function() {
+  describe('POST: /api/house', function() {
     describe('with a valid req body', function() {
       after(done => {
-        if(this.tempList) {
-          List.remove({})
+        if(this.tempHouse) {
+          House.remove({})
           .then(() => done())
           .catch(done);
           return;
@@ -27,36 +27,36 @@ describe('List Routes', function() {
         done();
       });
 
-      it('should return a list', done => {
-        request.post(`${url}/api/list`)
-        .send(exampleList)
+      it('should return a house', done => {
+        request.post(`${url}/api/house`)
+        .send(exampleHouse)
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test list name');
-          this.tempList = res.body;
+          expect(res.body.name).to.equal('hodor');
+          this.tempHouse = res.body;
           done();
         });
       });
     });
   });
 
-  describe('GET: /api/list/:id', function() {
+  describe('GET: /api/house/:id', function() {
     describe('with a valid body', function() {
       before(done => {
-        exampleList.timestamp = new Date();
-        new List(exampleList).save()
-        .then(list => {
-          this.tempList = list;
+        exampleHouse.timestamp = new Date();
+        new House(exampleHouse).save()
+        .then(house => {
+          this.tempHouse = house;
           done();
         })
         .catch(done);
       });
 
       after(done => {
-        delete exampleList.timestamp;
-        if(this.tempList) {
-          List.remove({})
+        delete exampleHouse.timestamp;
+        if(this.tempHouse) {
+          House.remove({})
           .then(() => done())
           .catch(done);
           return;
@@ -64,12 +64,12 @@ describe('List Routes', function() {
         done();
       });
 
-      it('should return a list', done => {
-        request.get(`${url}/api/list/${this.tempList._id}`)
+      it('should return a house', done => {
+        request.get(`${url}/api/house/${this.tempHouse._id}`)
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test list name');
+          expect(res.body.name).to.equal('hodor');
           done();
         });
       });

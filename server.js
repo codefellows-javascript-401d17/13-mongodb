@@ -6,18 +6,18 @@ const cors = require('cors');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const debug = require('debug')('note:server');
-const listRouter = require('./model/list.js');
+const houseRouter = require('./model/house.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = 'mongodb://localhost/listofnotees';
+const MONGODB_URI = 'mongodb://localhost/houses';
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 app.use(cors());
 app.use(morgan('dev'));
-app.use(listRouter);
+app.use(houseRouter);
 
 app.listen(PORT, () => {
   debug(`listening on ${PORT}`);

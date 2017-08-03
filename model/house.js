@@ -3,9 +3,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const listSchema = Schema({
+const houseSchema = Schema({
   name: { type: String, required: true },
   timestamp: { type: Date, required: true }
 });
 
-module.exports = mongoose.model('list', listSchema);
+module.exports = mongoose.model('house', houseSchema);
