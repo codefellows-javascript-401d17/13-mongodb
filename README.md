@@ -1,9 +1,9 @@
 ## James Lab-13 Documentation
 
   * server.js uses the environmental port (3000) and defines the connection to the database using MongooseJS, sets up the server using Express, and requires route/brewery-router.js, which defines all routes for the single-resource API.
-  * model/breweryjs defines the breweryconstructor.
+  * model/brewery.js defines the brewery constructor.
   * The following methods will return the following results:
-    * GET localhost:3000/api/brewery/xxxxxxxxxxxxxxxxxxxxxxxx (hexadecimal) - returns status code 200 and a brewery object matching a valid ID.
+    * GET localhost:3000/api/brewery/xxxxxxxxxxxxxxxxxxxxxxxx (:id) - returns status code 200 and a brewery object matching a valid ID.
     * POST localhost:3000/api/brewery - returns a 400 error code and the details of the error.
     * POST localhost:3000/api/brewery name=<NAME> grain=<GRAIN> hops=<HOPS> yeast=<YEAST> - returns status code 201 and a new breweryobject for a POST request with a valid body.
     * PUT localhost:3000/api/brewery - returns a 404 error code and the details of the error if a valid ID is not included.
