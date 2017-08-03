@@ -91,6 +91,8 @@ describe('Brewery Routes', function() {
           done();
         });
       });
+    });
+    describe('with an invalid request', function(){
       it('should return 404', done => {
         request.get(`${url}/api/brewery/1231231231241413212`)
         .end( (err, res) => {
