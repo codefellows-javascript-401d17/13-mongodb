@@ -34,3 +34,14 @@ airportRouter.get('/api/airport/:id', function (req, rsp, next) {
       next();
     })
 })
+
+airportRouter.delete('/api/airport/:id', function (req, rsp, next) {
+  debug('DELETE: /api/airport');
+  Airport.findByIdAndRemove(req.params.id)
+    .then((done) => {
+      done();
+    })
+    .catch((err) => {
+      next();
+    })
+})
