@@ -7,19 +7,20 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Promise = require('bluebird');
 
-const bandRouter = require('./routes/band-router.js');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const bandRouter = require('./routes/band-router.js');
+const error = require('./lib/errors.js');
 const MONGODB_URI = 'mongodb://localhost/bands';
 
-console.log(app);
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, { useMongoClient: true });
 
-app.use(cors);
 app.use(morgan('dev'));
+app.use(cors());
 app.use(bandRouter);
+app.use(error)
 
 app.listen(PORT, () => {
   debug('Server active on port: ', PORT);

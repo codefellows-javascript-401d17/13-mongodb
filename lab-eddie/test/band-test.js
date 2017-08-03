@@ -6,6 +6,7 @@ const request = require('superagent');
 
 const Band = require('../model/band.js');
 const url = 'http://localhost:3000';
+require('../server.js');
 
 let testingBand = {
   name: 'Led Zeppelin',
