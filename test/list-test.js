@@ -11,7 +11,7 @@ require('../server.js');
 
 const url = `http://localhost:${PORT}`;
 const exampleList = {
-  name: 'test list name';
+  name: 'test list name'
 }
 
 describe('List Routes', function() {
@@ -44,6 +44,7 @@ describe('List Routes', function() {
   describe('GET: /api/list/:id', function() {
     describe('with a valid body', function() {
       before(done => {
+        exampleList.timestamp = new Date();
         new List(exampleList).save()
         .then(list => {
           this.tempList = list;
@@ -53,10 +54,25 @@ describe('List Routes', function() {
       });
 
       after(done => {
+        delete exampleList.timestamp;
         if(this.tempList) {
           List.remove({})
+          .then(() => done())
+          .catch(done);
+          return;
         }
-      })
-    })
-  })
+        done();
+      });
+
+      it('should return a list', done => {
+        request.get(`${url}/api/list/${this.tempList._id}`)
+        .end((err, res) => {
+          if(err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('test list name');
+          done();
+        });
+      });
+    });
+  });
 });
