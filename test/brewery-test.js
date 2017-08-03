@@ -137,6 +137,9 @@ describe('Brewery Routes', function() {
       .send(newBrewery)
       .then(res => {
         expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('new test brewery name');
+        expect(res.body.address).to.equal('new test address');
+        expect(res.body.phoneNumber).to.equal('777-777-7777');
         tempBrewery = res.body;
       });
     });
