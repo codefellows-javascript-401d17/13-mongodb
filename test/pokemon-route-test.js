@@ -10,9 +10,19 @@ mongoose.Promise = Promise;
 require('../server.js');
 
 const url = `http://localhost:${PORT}`;
+
+let tempPokemon;
+
 const examplePokemon = {
-  name: 'test name',
-  type: 'test type'
+  name: 'the pokemon name',
+  type: 'the type',
+  gen: 'the gen'
+};
+
+const newPokemon = {
+  name: 'the pokemon name',
+  type: 'the type',
+  gen: 'the gen'
 };
 
 describe('Pokemon Routes', function() {
@@ -31,23 +41,24 @@ describe('Pokemon Routes', function() {
       it('should return a pokemon', done => {
         request.post(`${url}/api/pokemon`)
         .send(examplePokemon)
-        .end((err, res) => {
+        .end((err,res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test pokemon name');
-          expect(res.body.origin).to.equal('test pokemon type');
+          expect(res.body.name).to.equal('the pokemon name');
+          expect(res.body.type).to.equal('the type');
+          expect(res.body.gen).to.equal('the gen');
           this.tempPokemon = res.body;
           done();
         });
       });
+    });
 
-      it('should return 400 bad request', done => {
+    describe('with an invalid request', function() {
+      it('should return 400', done => {
         request.post(`${url}/api/pokemon`)
-        .send({ name: 'agumon', type: 'digimon'})
-        .end((err, res) => {
-          console.log('res text:', res.text);
+        .send()
+        .end((err,res) => {
           expect(res.status).to.equal(400);
-          expect(res.text).to.equal('BadRequestError');
           done();
         });
       });
@@ -56,91 +67,103 @@ describe('Pokemon Routes', function() {
 
   describe('GET: /api/pokemon/:id', function() {
     describe('with a valid body', function() {
-      before( done => {
+      before(done => {
+        examplePokemon.timestamp = new Date();
         new Pokemon(examplePokemon).save()
-        .then( pokemon => {
+        .then(pokemon => {
           this.tempPokemon = pokemon;
           done();
         })
         .catch(done);
       });
 
-      after( done => {
+      after(done => {
+        delete examplePokemon.timestamp;
         if(this.tempPokemon) {
           Pokemon.remove({})
-          .then( () => done())
+          .then(() => done())
           .catch(done);
+          return;
         }
+        done();
       });
 
       it('should return a pokemon', done => {
         request.get(`${url}/api/pokemon/${this.tempPokemon._id}`)
         .end((err, res) => {
-          if (err) return done(err);
+          if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test pokemon name');
-          expect(res.body.origin).to.equal('test pokemon type');
+          expect(res.body.name).to.equal('the pokemon name');
+          expect(res.body.type).to.equal('the type');
+          expect(res.body.gen).to.equal('the gen');
           done();
         });
       });
+    });
 
-      it('should return 404 not found', done => {
-        request.get(`${url}/api/pokemon/12345`)
+    describe('with an invalid request', function(){
+      it('should return 404', done => {
+        request.get(`${url}/api/pokemon/1236795`)
         .end((err, res) => {
           expect(res.status).to.equal(404);
-          expect(res.text).to.equal('NotFoundError');
           done();
         });
       });
     });
   });
 
-  describe('PUT: /api/pokemon', function() {
+  describe('testing PUT /api/pokemon', () => {
     before(done => {
-      Pokemon.create(examplePokemon)
+      examplePokemon.timestamp = new Date();
+      new Pokemon(examplePokemon).save()
       .then(pokemon => {
-        this.testPokemon = pokemon;
+        this.tempPokemon = pokemon;
         done();
       })
-      .catch(err => done(err));
+      .catch(done);
     });
 
     after(done => {
-      Pokemon.remove({})
-      .then( () => done())
-      .catch(err => done(err));
+      delete examplePokemon.timestamp;
+      if (this.tempPokemon) {
+        Pokemon.remove({})
+        .then(() => done())
+        .catch(done);
+        return;
+      }
+      done();
     });
-
-    it('should return a pokemon', done => {
-      request.put(`${url}/api/pokemon/${this.testPokemon._id}`)
-      .send({ name: 'new name', type: 'new type'})
-      .end((err, res) => {
-        if(err) return done(err);
+    it('should respond with a 200 status code and an updated pokemon object.', () => {
+      console.log(this.tempPokemon._id);
+      return request.put(`${url}/api/pokemon/${this.tempPokemon._id}`)
+      .send(newPokemon)
+      .then(res => {
         expect(res.status).to.equal(200);
-        expect(res.body.name).to.equal('new name');
-        expect(res.body.origin).to.equal('new type');
-        done();
+        expect(res.body.name).to.equal('the pokemon name');
+        expect(res.body.type).to.equal('the type');
+        expect(res.body.gen).to.equal('the gen');
+        tempPokemon = res.body;
       });
     });
+  });
 
-    it('should return 400 bad request', done => {
-      request.put(`${url}/api/pokemon/${this.testPokemon._id}`)
-      .end((err, res) => {
-        console.log('res text:', res.text);
-        expect(res.status).to.equal(400);
-        expect(res.text).to.equal('BadRequestError');
-        done();
-      });
+  it('should respond with a 400 error code.', () => {
+    return request.post(`${url}/api/pokemon`)
+    .send(tempPokemon)
+    .then((res) => {
+      tempPokemon = res.body;
+      return request.put(`${url}/api/pokemon/${this.tempPokemon._id}`)
+      .send(null);
+    })
+    .catch(err => {
+      expect(err.status).to.equal(400);
     });
+  });
 
-    it('should return 404 not found', done => {
-      request.put(`${url}/api/pokemon/123456789`)
-      .send({ name: 'new name', type: 'new type'})
-      .end((err, res) => {
-        expect(res.status).to.equal(404);
-        expect(res.text).to.equal('NotFoundError');
-        done();
-      });
+  it('should respond with a 404 error code if an ID is not found.', () => {
+    return request.get(`${url}/api/pokemon/12345`)
+    .catch(err => {
+      expect(err.status).to.equal(404);
     });
   });
 });

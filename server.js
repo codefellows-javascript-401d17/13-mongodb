@@ -6,8 +6,7 @@ const cors = require('cors');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const debug = require('debug')('pokemon:server');
-
-const pokemonRouter = require('./route/pokemon-route');
+const pokemonRouter = require('./route/pokemon-route.js');
 const errors = require('./lib/error-middleware.js');
 
 const app = express();
