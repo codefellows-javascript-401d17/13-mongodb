@@ -2,44 +2,23 @@
 
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
-const debug = require('debug')('house:house-router');
-const createError = require('http_errors');
+const debug = require('debug')('note:house-route');
 const House = require('../model/house.js');
-
 const houseRouter = module.exports = new Router();
 
-houseRouter.post('/api/house', jsonParser, function(req, res, next) {
-  debug('POST: /api/house');
+houseRouter.post('/api/house', jsonParser, function(request, response, next) {
+  debug('POST: /api/house/');
 
-  req.body.timestamp = new Date();
-  new House(req.body).save()
-  .then(house => res.json(house))
+  request.body.timestamp = new Date();
+  new House(request.body).save()
+  .then( house => response.json(house))
   .catch(next);
 });
 
-houseRouter.get('api/house/:id', function(req, res, next) {
-  debug('GET: /api/house');
+houseRouter.get('/api/house/:id', function(request, response, next) {
+  debug('POST: /api/house/:id');
 
-  House.findById(req.params.id)
-  .then(house => res.json(house))
+  House.findById(request.params.id)
+  .then( list => response.json(list))
   .catch(next);
-});
-
-houseRouter.put('/api/house/:id', jsonParser, function(req, res, next) {
-  debug('PUT: /api/house/:id');
-
-  House.findByIdAndUpdate(req.params.id, req.body, { new: true })
-  .then(house => res.json(house))
-  .catch(err => {
-    if(err.name === 'ValidationError') return next(err);
-    next(createError(404, err.message));
-  });
-});
-
-houseRouter.delete('/api/house/:id', function(req, res, next) {
-  debug('DELETE: /api/house/:id');
-
-  House.findByIdAndRemove(req.params.id)
-  .then(() => res.status(204).send())
-  .catch(err => next(createError(404, err.message)));
 });

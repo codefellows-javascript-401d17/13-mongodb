@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 
 const houseSchema = Schema({
   name: { type: String, required: true },
+  seat: { type: String, required: true },
+  region: { type: String, required: true },
+  words: { type: String, required: true },
   timestamp: { type: Date, required: true }
 });
 

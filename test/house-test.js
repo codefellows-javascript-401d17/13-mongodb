@@ -11,30 +11,32 @@ require('../server.js');
 
 const url = `http://localhost:${PORT}`;
 const exampleHouse = {
-  name: 'hodor'
-};
+  name: 'Atreides',
+  seat: 'Caladan',
+  region: 'Delta Pavonis',
+  words: 'Fear is the Mind-Killer'
+}
 
 describe('House Routes', function() {
   describe('POST: /api/house', function() {
-    describe('with a valid req body', function() {
-      after(done => {
+    describe('with a valid request body', function() {
+      after( done => {
         if(this.tempHouse) {
           House.remove({})
-          .then(() => done())
+          .then( () => done())
           .catch(done);
           return;
         }
         done();
       });
-
       it('should return a house', done => {
         request.post(`${url}/api/house`)
         .send(exampleHouse)
-        .end((err, res) => {
+        .end((err, response) => {
           if(err) return done(err);
-          expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('hodor');
-          this.tempHouse = res.body;
+          expect(response.status).to.equal(200);
+          expect(response.body.name).to.equal('Atreides');
+          this.tempHouse = response.body;
           done();
         });
       });
@@ -43,21 +45,21 @@ describe('House Routes', function() {
 
   describe('GET: /api/house/:id', function() {
     describe('with a valid body', function() {
-      before(done => {
+      before( done => {
         exampleHouse.timestamp = new Date();
         new House(exampleHouse).save()
-        .then(house => {
+        .then( house => {
           this.tempHouse = house;
           done();
         })
         .catch(done);
       });
 
-      after(done => {
+      after( done => {
         delete exampleHouse.timestamp;
         if(this.tempHouse) {
           House.remove({})
-          .then(() => done())
+          .then( () => done())
           .catch(done);
           return;
         }
@@ -69,7 +71,7 @@ describe('House Routes', function() {
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('hodor');
+          expect(res.body.name).to.equal('Atreides');
           done();
         });
       });
